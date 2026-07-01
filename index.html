@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Installment vs. Upfront — Float Calculator</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#1F3864;      /* your header navy */
+    --ink:#16223B;
+    --paper:#EEF1F5;
+    --card:#FFFFFF;
+    --line:#DDE3EC;
+    --gold:#B0821F;
+    --gold-soft:#F4ECD8;
+    --text:#1E2A44;
+    --muted:#697488;
+    --pos:#1F3864;
+    --neg:#A8341F;
+  }
+  *{box-sizing:border-box;}
+  html{-webkit-text-size-adjust:100%;}
+  body{
+    margin:0; background:var(--paper); color:var(--text);
+    font-family:"Inter",system-ui,sans-serif; line-height:1.5;
+    font-variant-numeric:tabular-nums;
+  }
+  .wrap{max-width:1080px;margin:0 auto;padding:32px 20px 64px;}
+
+  /* Header */
+  header{margin-bottom:28px;}
+  .eyebrow{
+    font-family:"IBM Plex Mono",monospace; font-size:11px; letter-spacing:.22em;
+    text-transform:uppercase; color:var(--gold); font-weight:600; margin:0 0 10px;
+  }
+  h1{
+    font-family:"Fraunces",serif; font-weight:600; letter-spacing:-.01em;
+    font-size:clamp(28px,5vw,44px); line-height:1.05; margin:0 0 10px; color:var(--ink);
+  }
+  .lede{max-width:60ch;color:var(--muted);font-size:15px;margin:0;}
+
+  .grid{display:grid;grid-template-columns:340px 1fr;gap:24px;align-items:start;}
+  @media(max-width:860px){.grid{grid-template-columns:1fr;}}
+
+  /* Cards */
+  .card{background:var(--card);border:1px solid var(--line);border-radius:12px;}
+  .card-head{
+    background:var(--navy); color:#fff; padding:14px 18px; border-radius:12px 12px 0 0;
+    font-family:"IBM Plex Mono",monospace; font-size:11px; letter-spacing:.18em; text-transform:uppercase; font-weight:500;
+  }
+  .card-body{padding:20px 18px;}
+
+  /* Inputs */
+  .field{margin-bottom:18px;}
+  .field:last-child{margin-bottom:0;}
+  label{display:block;font-size:12.5px;font-weight:600;color:var(--ink);margin-bottom:6px;}
+  label .hint{display:block;font-weight:400;color:var(--muted);font-size:11.5px;margin-top:2px;}
+  .input-line{position:relative;display:flex;align-items:center;}
+  .prefix{position:absolute;left:12px;font-family:"IBM Plex Mono",monospace;font-size:13px;color:var(--muted);pointer-events:none;}
+  input[type=number]{
+    width:100%; padding:11px 12px 11px 40px; font-family:"IBM Plex Mono",monospace; font-size:15px;
+    border:1px solid var(--line); border-radius:8px; background:#FBFCFE; color:var(--ink);
+    font-variant-numeric:tabular-nums; -moz-appearance:textfield;
+  }
+  input.nopre{padding-left:12px;}
+  input.suf{padding-right:34px;}
+  .suffix{position:absolute;right:12px;font-family:"IBM Plex Mono",monospace;font-size:13px;color:var(--muted);pointer-events:none;}
+  input:focus{outline:none;border-color:var(--navy);box-shadow:0 0 0 3px rgba(31,56,100,.14);}
+  input::-webkit-outer-spin-button,input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0;}
+
+  .seg{display:flex;border:1px solid var(--line);border-radius:8px;overflow:hidden;}
+  .seg button{
+    flex:1;padding:9px 6px;border:0;background:#FBFCFE;cursor:pointer;font-family:"Inter",sans-serif;
+    font-size:12.5px;font-weight:500;color:var(--muted);
+  }
+  .seg button+button{border-left:1px solid var(--line);}
+  .seg button[aria-pressed=true]{background:var(--navy);color:#fff;font-weight:600;}
+  .seg button:focus-visible{outline:2px solid var(--gold);outline-offset:-2px;}
+
+  details.adv{margin-top:4px;border-top:1px dashed var(--line);padding-top:14px;}
+  details.adv summary{cursor:pointer;font-size:12px;font-weight:600;color:var(--gold);list-style:none;font-family:"IBM Plex Mono",monospace;letter-spacing:.04em;}
+  details.adv summary::-webkit-details-marker{display:none;}
+  details.adv summary::before{content:"+ ";}
+  details.adv[open] summary::before{content:"– ";}
+  details.adv .field{margin-top:14px;}
+
+  /* Result hero — ledger comparison */
+  .ledger{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);border-radius:8px;overflow:hidden;border:1px solid var(--line);}
+  .ledger .cell{background:#fff;padding:16px 16px;}
+  .ledger .k{font-size:11px;font-family:"IBM Plex Mono",monospace;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:6px;}
+  .ledger .v{font-family:"Fraunces",serif;font-size:24px;font-weight:600;color:var(--ink);}
+  .ledger .cell.sub{font-size:11.5px;color:var(--muted);margin-top:4px;font-family:"Inter";}
+
+  .headline{
+    margin-top:16px;background:var(--gold-soft);border:1px solid #E7D6A8;border-radius:10px;
+    padding:20px;display:flex;align-items:baseline;justify-content:space-between;gap:16px;flex-wrap:wrap;
+  }
+  .headline .lab{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);font-weight:600;}
+  .headline .big{font-family:"Fraunces",serif;font-weight:700;font-size:clamp(34px,7vw,52px);line-height:1;color:var(--ink);letter-spacing:-.02em;}
+  .headline .pct{font-size:13px;color:var(--muted);margin-top:6px;font-family:"IBM Plex Mono",monospace;}
+  .big.neg{color:var(--neg);}
+
+  .stat-row{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:8px;overflow:hidden;margin-top:16px;}
+  .stat{background:#fff;padding:14px;}
+  .stat .k{font-size:10.5px;font-family:"IBM Plex Mono",monospace;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:5px;}
+  .stat .v{font-family:"IBM Plex Mono",monospace;font-size:16px;font-weight:600;color:var(--ink);}
+  @media(max-width:520px){.stat-row{grid-template-columns:1fr;}.ledger{grid-template-columns:1fr;}}
+
+  /* Schedule */
+  .sched-wrap{margin-top:24px;}
+  .sched-scroll{overflow-x:auto;border:1px solid var(--line);border-radius:12px;}
+  table{border-collapse:collapse;width:100%;font-family:"IBM Plex Mono",monospace;font-size:12.5px;}
+  thead th{
+    background:var(--navy);color:#fff;font-weight:500;text-align:right;padding:11px 14px;
+    font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap;
+  }
+  thead th:first-child{text-align:left;}
+  tbody td{padding:9px 14px;text-align:right;border-top:1px solid var(--line);white-space:nowrap;color:var(--text);}
+  tbody td:first-child{text-align:left;color:var(--muted);}
+  tbody tr:nth-child(even) td{background:#FAFBFD;}
+  .bar-cell{width:120px;text-align:left!important;}
+  .bar-track{background:#EDF0F5;border-radius:3px;height:8px;width:100%;overflow:hidden;}
+  .bar-fill{background:var(--navy);height:100%;border-radius:3px;}
+  tfoot td{padding:11px 14px;text-align:right;font-weight:600;border-top:2px solid var(--navy);background:#F4F6FA;color:var(--ink);}
+  tfoot td:first-child{text-align:left;text-transform:uppercase;font-size:10.5px;letter-spacing:.08em;color:var(--muted);}
+  .gold-txt{color:var(--gold);}
+
+  .note{margin-top:18px;font-size:12px;color:var(--muted);line-height:1.6;max-width:78ch;}
+  .note b{color:var(--ink);font-weight:600;}
+  footer{margin-top:36px;font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--muted);letter-spacing:.04em;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <p class="eyebrow">Time value of money</p>
+    <h1>Installment vs. Upfront</h1>
+    <p class="lede">At 0% installment your total outlay is identical either way — so the only real difference is the return you earn on cash you haven't paid out yet. This models that float against a liquid-asset yield.</p>
+  </header>
+
+  <div class="grid">
+    <!-- INPUTS -->
+    <section class="card" aria-label="Inputs">
+      <div class="card-head">Assumptions</div>
+      <div class="card-body">
+        <div class="field">
+          <label for="upfront">Upfront price
+            <span class="hint">What it costs if you pay in full today</span>
+          </label>
+          <div class="input-line">
+            <span class="prefix">RM</span>
+            <input type="number" id="upfront" value="3600" min="0" step="100" inputmode="decimal">
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="terms">Number of installments</label>
+          <div class="input-line">
+            <input type="number" id="terms" class="nopre" value="12" min="1" step="1" inputmode="numeric">
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Payment frequency</label>
+          <div class="seg" id="freq" role="group" aria-label="Payment frequency">
+            <button type="button" data-months="1" aria-pressed="true">Monthly</button>
+            <button type="button" data-months="3" aria-pressed="false">Quarterly</button>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>First payment</label>
+          <div class="seg" id="timing" role="group" aria-label="First payment timing">
+            <button type="button" data-due="0" aria-pressed="true">Due today</button>
+            <button type="button" data-due="1" aria-pressed="false">End of period</button>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="yield">Liquid-asset yield
+            <span class="hint">Annual return where you park the cash (MMF, FD, ASB…)</span>
+          </label>
+          <div class="input-line">
+            <input type="number" id="yield" class="nopre suf" value="4.0" min="0" step="0.1" inputmode="decimal">
+            <span class="suffix">% p.a.</span>
+          </div>
+        </div>
+
+        <details class="adv">
+          <summary>Advanced — non-zero plans / fees</summary>
+          <div class="field">
+            <label for="plantotal">Installment plan total
+              <span class="hint">Leave equal to upfront for a true 0% plan. Set higher to model a processing fee or markup.</span>
+            </label>
+            <div class="input-line">
+              <span class="prefix">RM</span>
+              <input type="number" id="plantotal" value="3600" min="0" step="10" inputmode="decimal">
+            </div>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <!-- RESULTS -->
+    <section aria-label="Results">
+      <div class="card">
+        <div class="card-head">The comparison</div>
+        <div class="card-body">
+          <div class="ledger">
+            <div class="cell">
+              <div class="k">Pay upfront</div>
+              <div class="v" id="cost-upfront">RM 3,600</div>
+              <div class="sub">Cash gone today · no float</div>
+            </div>
+            <div class="cell">
+              <div class="k">Installment + invest</div>
+              <div class="v" id="cost-installment">RM 3,486</div>
+              <div class="sub" id="cost-installment-sub">Effective net cost after returns</div>
+            </div>
+          </div>
+
+          <div class="headline">
+            <div>
+              <div class="lab" id="gain-lab">You come out ahead by</div>
+              <div class="pct" id="gain-pct">— of the upfront price</div>
+            </div>
+            <div class="big" id="gain-amt">RM 114</div>
+          </div>
+
+          <div class="stat-row">
+            <div class="stat"><div class="k">Per installment</div><div class="v" id="s-inst">RM 300</div></div>
+            <div class="stat"><div class="k">Gross interest earned</div><div class="v" id="s-int">RM 114</div></div>
+            <div class="stat"><div class="k">Plan cost vs upfront</div><div class="v" id="s-fee">RM 0</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="sched-wrap">
+        <div class="sched-scroll">
+          <table id="sched">
+            <thead>
+              <tr>
+                <th>Period</th>
+                <th>Opening invested</th>
+                <th>Interest</th>
+                <th>Payment</th>
+                <th>Closing invested</th>
+                <th class="bar-cell">Float</th>
+              </tr>
+            </thead>
+            <tbody id="sched-body"></tbody>
+            <tfoot>
+              <tr>
+                <td>Total</td>
+                <td></td>
+                <td class="gold-txt" id="f-int">—</td>
+                <td id="f-pay">—</td>
+                <td id="f-end">—</td>
+                <td class="bar-cell"></td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+      </div>
+
+      <p class="note">
+        <b>How it reads:</b> you set aside the full upfront amount today and invest it. Each period you withdraw one installment to pay the plan; the balance left in the account keeps earning. The <b>closing invested</b> balance after the final payment is your net gain — pure interest when the plan is genuinely 0%.
+        <br><br>
+        Returns aren't guaranteed and this ignores tax on investment income, any liquidity lock-in, and the discipline cost of not spending the parked cash. It's a decision aid, not advice.
+      </p>
+    </section>
+  </div>
+
+  <footer>Client-side only · nothing leaves your browser</footer>
+</div>
+
+<script>
+(function(){
+  const $ = id => document.getElementById(id);
+  const fmt = new Intl.NumberFormat('en-MY',{minimumFractionDigits:2,maximumFractionDigits:2});
+  const fmt0 = new Intl.NumberFormat('en-MY',{maximumFractionDigits:0});
+  const RM = n => 'RM ' + fmt.format(n);
+
+  let months = 1;   // period length in months
+  let dueEnd = 0;   // 0 = first payment today, 1 = end of period
+
+  // segmented controls
+  document.querySelectorAll('#freq button').forEach(b=>b.addEventListener('click',()=>{
+    document.querySelectorAll('#freq button').forEach(x=>x.setAttribute('aria-pressed','false'));
+    b.setAttribute('aria-pressed','true'); months = +b.dataset.months; calc();
+  }));
+  document.querySelectorAll('#timing button').forEach(b=>b.addEventListener('click',()=>{
+    document.querySelectorAll('#timing button').forEach(x=>x.setAttribute('aria-pressed','false'));
+    b.setAttribute('aria-pressed','true'); dueEnd = +b.dataset.due; calc();
+  }));
+
+  // keep plan total synced to upfront until user overrides it
+  let planTouched = false;
+  $('plantotal').addEventListener('input',()=>{planTouched=true; calc();});
+  $('upfront').addEventListener('input',()=>{
+    if(!planTouched) $('plantotal').value = $('upfront').value;
+    calc();
+  });
+  ['terms','yield'].forEach(id=>$(id).addEventListener('input',calc));
+
+  function calc(){
+    const upfront = Math.max(0, +$('upfront').value || 0);
+    const n = Math.max(1, Math.floor(+$('terms').value || 1));
+    const yr = Math.max(0, +$('yield').value || 0) / 100;
+    let planTotal = planTouched ? Math.max(0, +$('plantotal').value || 0) : upfront;
+
+    const periodRate = yr * months / 12;         // simple pro-rata period rate
+    const installment = planTotal / n;
+    const fee = planTotal - upfront;
+
+    // simulate: invest `upfront`, pay installments, earn on the balance
+    let bal = upfront;
+    let totalInt = 0;
+    const rows = [];
+    for(let k = 0; k < n; k++){
+      const openingRaw = bal;
+      let interest = 0;
+      // interest accrues on the balance held through the period.
+      // "Due today": first payment happens before any interest accrues.
+      if(!(dueEnd === 0 && k === 0)){
+        interest = bal * periodRate;
+        bal += interest;
+        totalInt += interest;
+      }
+      const opening = openingRaw; // display opening before interest
+      bal -= installment;
+      rows.push({k:k+1, opening, interest, payment:installment, closing:bal});
+    }
+
+    const gain = bal;                 // leftover invested = net advantage
+    const pct = upfront > 0 ? gain / upfront * 100 : 0;
+
+    // ---- render summary ----
+    $('cost-upfront').textContent = RM(upfront);
+    $('cost-installment').textContent = RM(upfront - gain);
+    $('s-inst').textContent = RM(installment);
+    $('s-int').textContent = RM(totalInt);
+    $('s-fee').textContent = (fee>=0?'+':'−') + RM(Math.abs(fee)).slice(3);
+    $('s-fee').style.color = fee > 0 ? 'var(--neg)' : 'var(--muted)';
+
+    const gEl = $('gain-amt'), labEl = $('gain-lab'), pctEl = $('gain-pct');
+    if(gain >= 0){
+      labEl.textContent = 'You come out ahead by';
+      gEl.classList.remove('neg');
+      gEl.textContent = RM(gain);
+      pctEl.textContent = fmt.format(pct) + '% of the upfront price kept in your pocket';
+    } else {
+      labEl.textContent = 'The plan costs you extra';
+      gEl.classList.add('neg');
+      gEl.textContent = '– ' + RM(Math.abs(gain));
+      pctEl.textContent = 'fees outweigh the ' + fmt.format(yr*100) + '% yield over this term';
+    }
+
+    // ---- render schedule ----
+    const maxBal = Math.max(upfront, 1);
+    const body = $('sched-body');
+    body.innerHTML = rows.map(r=>{
+      const w = Math.max(0, Math.min(100, r.closing / maxBal * 100));
+      const label = months===3 ? ('Q'+r.k) : ('Mth '+r.k);
+      return `<tr>
+        <td>${label}</td>
+        <td>${fmt.format(r.opening)}</td>
+        <td class="gold-txt">${r.interest? fmt.format(r.interest) : '—'}</td>
+        <td>${fmt.format(r.payment)}</td>
+        <td>${fmt.format(r.closing)}</td>
+        <td class="bar-cell"><div class="bar-track"><div class="bar-fill" style="width:${w}%"></div></div></td>
+      </tr>`;
+    }).join('');
+
+    $('f-int').textContent = fmt.format(totalInt);
+    $('f-pay').textContent = fmt.format(installment * n);
+    $('f-end').textContent = fmt.format(gain);
+  }
+
+  calc();
+})();
+</script>
+</body>
+</html>
