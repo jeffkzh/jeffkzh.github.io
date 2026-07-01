@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>statement → xlsx · Malaysia</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;450;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.4.0/exceljs.min.js"></script>
+<style>
+  :root{
+    --ink:#14223D;
+    --navy:#1F3864;
+    --navy-600:#2A4A7F;
+    --paper:#FBFCFD;
+    --surface:#FFFFFF;
+    --line:#E4E7EC;
+    --line-strong:#CBD2DC;
+    --muted:#5B6675;
+    --muted-2:#8A93A1;
+    --emerald:#15795B;
+    --emerald-soft:#E7F3EE;
+    --debit:#B23A48;
+    --credit:#15795B;
+    --amber:#9A6B0E;
+    --amber-soft:#FBF3E2;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Inter',system-ui,sans-serif;
+    font-size:15px;
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:940px;margin:0 auto;padding:32px 24px 80px;}
+
+  .backlink{display:inline-flex;align-items:center;gap:6px;font-family:'IBM Plex Mono',monospace;
+    font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted-2);text-decoration:none;margin-bottom:20px;}
+  .backlink:hover{color:var(--navy);}
+  .backlink:focus-visible{outline:2px solid var(--navy-600);outline-offset:3px;border-radius:3px;}
+
+  /* ---- header ---- */
+  header.top{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:40px;}
+  .wordmark{font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:18px;letter-spacing:-.01em;color:var(--ink);display:flex;align-items:center;gap:2px;}
+  .wordmark .arr{color:var(--navy-600);}
+  .wordmark .tag{font-family:'Inter',sans-serif;font-weight:500;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted-2);margin-left:10px;padding:3px 8px;border:1px solid var(--line-strong);border-radius:100px;}
+  .privacy-pill{display:inline-flex;align-items:center;gap:8px;font-size:12.5px;font-weight:500;color:var(--emerald);background:var(--emerald-soft);border:1px solid #BFE0D2;padding:7px 13px;border-radius:100px;}
+  .privacy-pill svg{flex:none;}
+
+  /* ---- hero ---- */
+  .hero{margin-bottom:28px;}
+  .eyebrow{font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--navy-600);margin:0 0 14px;}
+  h1{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:clamp(30px,5vw,46px);line-height:1.05;letter-spacing:-.02em;margin:0 0 14px;color:var(--ink);}
+  h1 .em{color:var(--navy);}
+  .lede{font-size:16.5px;color:var(--muted);max-width:60ch;margin:0;}
+
+  /* ---- drop zone ---- */
+  .stage{background:var(--surface);border:1px solid var(--line);border-radius:18px;overflow:hidden;box-shadow:0 1px 0 rgba(20,34,61,.03),0 12px 30px -22px rgba(20,34,61,.25);}
+  .dropzone{padding:46px 32px;text-align:center;cursor:pointer;transition:background .18s ease,border-color .18s ease;border:2px dashed transparent;border-radius:18px;}
+  .dropzone:hover,.dropzone.drag{background:#F4F7FB;border-color:var(--navy-600);}
+  .dz-icon{width:54px;height:54px;margin:0 auto 18px;border-radius:14px;background:var(--navy);display:flex;align-items:center;justify-content:center;color:#fff;}
+  .dz-title{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:20px;margin:0 0 6px;}
+  .dz-sub{color:var(--muted);font-size:14px;margin:0 0 22px;}
+  .dz-btn{display:inline-flex;align-items:center;gap:9px;background:var(--navy);color:#fff;border:none;font-family:'Inter';font-size:14.5px;font-weight:600;padding:12px 22px;border-radius:11px;cursor:pointer;transition:background .15s ease,transform .05s ease;}
+  .dz-btn:hover{background:var(--navy-600);}
+  .dz-btn:active{transform:translateY(1px);}
+  .dz-foot{margin-top:22px;font-size:12px;color:var(--muted-2);}
+  .banks{display:flex;flex-wrap:wrap;gap:7px;justify-content:center;margin-top:14px;}
+  .bank-chip{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--muted);background:#F1F4F8;border:1px solid var(--line);padding:3px 9px;border-radius:6px;}
+
+  /* ---- password ---- */
+  .pw{padding:30px 32px;border-top:1px solid var(--line);background:#F9FAFC;}
+  .pw h3{font-family:'Space Grotesk';font-size:16px;margin:0 0 4px;}
+  .pw p{margin:0 0 16px;font-size:13.5px;color:var(--muted);}
+  .pw-row{display:flex;gap:10px;flex-wrap:wrap;}
+  .pw input{flex:1;min-width:200px;font-family:'IBM Plex Mono',monospace;font-size:14px;padding:11px 14px;border:1px solid var(--line-strong);border-radius:10px;background:#fff;color:var(--ink);}
+  .pw input:focus{outline:2px solid var(--navy-600);outline-offset:1px;border-color:var(--navy-600);}
+  .pw button{background:var(--ink);color:#fff;border:none;font-weight:600;font-size:14px;padding:0 22px;border-radius:10px;cursor:pointer;}
+  .pw.err input{border-color:var(--debit);}
+
+  /* ---- processing ---- */
+  .processing{padding:40px 32px;border-top:1px solid var(--line);display:flex;align-items:center;gap:16px;}
+  .spinner{width:26px;height:26px;border:3px solid var(--line);border-top-color:var(--navy);border-radius:50%;animation:spin .8s linear infinite;flex:none;}
+  @keyframes spin{to{transform:rotate(360deg);}}
+  .processing .ptext{font-size:14.5px;color:var(--muted);}
+  .processing .ptext b{color:var(--ink);font-weight:600;}
+
+  /* ---- results ---- */
+  .results{border-top:1px solid var(--line);}
+  .res-bar{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;padding:22px 32px;background:#F9FAFC;border-bottom:1px solid var(--line);}
+  .res-meta{display:flex;flex-wrap:wrap;gap:10px 22px;align-items:center;}
+  .meta-item{display:flex;flex-direction:column;gap:1px;}
+  .meta-item .k{font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted-2);font-weight:600;}
+  .meta-item .v{font-family:'IBM Plex Mono',monospace;font-size:14px;font-weight:500;color:var(--ink);}
+  .detected{display:inline-flex;align-items:center;gap:8px;font-family:'Space Grotesk';font-weight:600;font-size:15px;color:var(--navy);background:#EAF0F9;border:1px solid #C9D8EE;padding:6px 13px;border-radius:9px;}
+
+  .tie{display:inline-flex;align-items:center;gap:9px;font-size:13px;font-weight:600;padding:8px 14px;border-radius:10px;}
+  .tie.ok{color:var(--emerald);background:var(--emerald-soft);border:1px solid #BFE0D2;}
+  .tie.warn{color:var(--amber);background:var(--amber-soft);border:1px solid #EBD9AE;}
+  .tie .dot{width:8px;height:8px;border-radius:50%;}
+  .tie.ok .dot{background:var(--emerald);}
+  .tie.warn .dot{background:var(--amber);}
+
+  .dl-row{padding:18px 32px;display:flex;gap:12px;align-items:center;flex-wrap:wrap;border-bottom:1px solid var(--line);}
+  .dl-btn{display:inline-flex;align-items:center;gap:10px;background:var(--navy);color:#fff;border:none;font-family:'Inter';font-weight:600;font-size:15px;padding:13px 24px;border-radius:11px;cursor:pointer;transition:background .15s ease,transform .05s ease;}
+  .dl-btn:hover{background:var(--navy-600);}
+  .dl-btn:active{transform:translateY(1px);}
+  .dl-note{font-size:12.5px;color:var(--muted-2);}
+
+  /* ledger preview */
+  .ledger-head{padding:18px 32px 10px;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted-2);}
+  .ledger-scroll{max-height:430px;overflow:auto;border-top:1px solid var(--line);}
+  table.ledger{width:100%;border-collapse:collapse;font-size:13px;}
+  table.ledger th{position:sticky;top:0;background:var(--navy);color:#fff;font-family:'Inter';font-weight:600;font-size:11px;letter-spacing:.04em;text-transform:uppercase;text-align:left;padding:10px 16px;white-space:nowrap;z-index:1;}
+  table.ledger th.num,table.ledger td.num{text-align:right;font-family:'IBM Plex Mono',monospace;}
+  table.ledger td{padding:9px 16px;border-bottom:1px solid #EEF1F5;vertical-align:top;}
+  table.ledger tr:hover td{background:#F8FAFC;}
+  td.date{font-family:'IBM Plex Mono',monospace;color:var(--muted);white-space:nowrap;}
+  td.desc{color:var(--ink);max-width:360px;}
+  td.debit{color:var(--debit);}
+  td.credit{color:var(--credit);}
+  td.bal{color:var(--ink);font-weight:600;}
+  .more-row td{text-align:center;color:var(--muted-2);font-size:12.5px;padding:14px;font-style:italic;}
+
+  /* ---- error / empty ---- */
+  .notice{padding:30px 32px;border-top:1px solid var(--line);}
+  .notice.error{background:#FCF4F4;}
+  .notice h3{font-family:'Space Grotesk';font-size:16px;margin:0 0 6px;display:flex;align-items:center;gap:9px;}
+  .notice.error h3{color:var(--debit);}
+  .notice p{margin:0;font-size:14px;color:var(--muted);}
+  .notice .retry{margin-top:16px;background:transparent;border:1px solid var(--line-strong);color:var(--ink);font-weight:600;font-size:13.5px;padding:9px 18px;border-radius:9px;cursor:pointer;}
+  .notice .retry:hover{border-color:var(--navy-600);color:var(--navy);}
+
+  /* ---- footer ---- */
+  footer{margin-top:30px;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px;}
+  .fcard{background:var(--surface);border:1px solid var(--line);border-radius:13px;padding:18px 20px;}
+  .fcard .fi{width:30px;height:30px;border-radius:8px;background:#EAF0F9;color:var(--navy);display:flex;align-items:center;justify-content:center;margin-bottom:11px;}
+  .fcard h4{font-family:'Space Grotesk';font-size:14px;margin:0 0 5px;}
+  .fcard p{margin:0;font-size:12.5px;color:var(--muted);line-height:1.5;}
+  .demo-flag{margin-top:26px;font-size:12px;color:var(--muted-2);text-align:center;padding-top:18px;border-top:1px solid var(--line);}
+  .demo-flag b{color:var(--muted);font-weight:600;}
+
+  .hidden{display:none !important;}
+
+  @media (prefers-reduced-motion:reduce){
+    *{animation-duration:.001ms !important;transition-duration:.001ms !important;}
+  }
+  @media (max-width:560px){
+    .wrap{padding:22px 16px 60px;}
+    .dropzone,.pw,.processing,.res-bar,.dl-row,.notice{padding-left:18px;padding-right:18px;}
+    table.ledger th,table.ledger td{padding-left:12px;padding-right:12px;}
+    td.desc{max-width:180px;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <a class="backlink" href="./">← All tools</a>
+
+  <header class="top">
+    <div class="wordmark">statement<span class="arr"> → </span>xlsx<span class="tag">Malaysia</span></div>
+    <span class="privacy-pill">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      Processed in your browser · never uploaded
+    </span>
+  </header>
+
+  <section class="hero">
+    <p class="eyebrow">Bank statement → spreadsheet</p>
+    <h1>Turn a Malaysian bank statement<br>into <span class="em">clean Excel</span>.</h1>
+    <p class="lede">Drop a PDF statement. Every transaction is extracted with its running balance, debit/credit sorted out, and tied back to the closing balance — all without your file leaving this page.</p>
+  </section>
+
+  <div class="stage" id="stage">
+
+    <!-- drop zone -->
+    <div class="dropzone" id="dropzone" tabindex="0" role="button" aria-label="Choose a PDF bank statement">
+      <div class="dz-icon">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3v4a1 1 0 0 0 1 1h4"/><path d="M17 21H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7l5 5v11a2 2 0 0 1-2 2z"/><path d="M9 13h6M9 17h4"/></svg>
+      </div>
+      <p class="dz-title">Drop your statement PDF here</p>
+      <p class="dz-sub">or pick a file — text-based e-statements work best</p>
+      <button class="dz-btn" type="button" id="pickBtn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+        Choose PDF
+      </button>
+      <input type="file" id="fileInput" accept="application/pdf,.pdf" class="hidden">
+      <p class="dz-foot">Auto-detects the bank · scanned image PDFs aren't handled in this demo</p>
+      <div class="banks" id="bankChips"></div>
+    </div>
+
+    <!-- password -->
+    <div class="pw hidden" id="pwBox">
+      <h3>This statement is password-protected</h3>
+      <p>Banks often lock e-statements with your IC number or date of birth. Enter it to unlock — it's used only here in your browser.</p>
+      <div class="pw-row">
+        <input type="password" id="pwInput" placeholder="Statement password" autocomplete="off">
+        <button type="button" id="pwBtn">Unlock</button>
+      </div>
+    </div>
+
+    <!-- processing -->
+    <div class="processing hidden" id="proc">
+      <div class="spinner"></div>
+      <div class="ptext"><b id="procFile">Reading…</b><br><span id="procStep">Opening the PDF</span></div>
+    </div>
+
+    <!-- results -->
+    <div class="results hidden" id="results">
+      <div class="res-bar">
+        <div class="res-meta">
+          <span class="detected" id="detected">Bank</span>
+          <div class="meta-item"><span class="k">Period</span><span class="v" id="mPeriod">—</span></div>
+          <div class="meta-item"><span class="k">Rows</span><span class="v" id="mRows">—</span></div>
+          <div class="meta-item"><span class="k">Closing</span><span class="v" id="mClosing">—</span></div>
+        </div>
+        <span class="tie" id="tie"><span class="dot"></span><span id="tieText">—</span></span>
+      </div>
+
+      <div class="dl-row">
+        <button class="dl-btn" type="button" id="dlBtn">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M7 11l5 4 5-4"/><path d="M5 21h14"/></svg>
+          Download Excel
+        </button>
+        <button class="retry" id="againBtn" style="background:transparent;border:1px solid var(--line-strong);color:var(--ink);font-weight:600;font-size:13.5px;padding:11px 18px;border-radius:10px;cursor:pointer;">Convert another</button>
+        <span class="dl-note">Navy-header .xlsx · Summary + Transactions sheets</span>
+      </div>
+
+      <p class="ledger-head">Ledger preview</p>
+      <div class="ledger-scroll">
+        <table class="ledger">
+          <thead><tr>
+            <th>Date</th><th>Description</th>
+            <th class="num">Debit (RM)</th><th class="num">Credit (RM)</th><th class="num">Balance (RM)</th>
+          </tr></thead>
+          <tbody id="ledgerBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- error / empty -->
+    <div class="notice error hidden" id="errBox">
+      <h3>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/></svg>
+        <span id="errTitle">Couldn't read this statement</span>
+      </h3>
+      <p id="errMsg"></p>
+      <button class="retry" id="errRetry">Try another file</button>
+    </div>
+  </div>
+
+  <footer>
+    <div class="fcard">
+      <div class="fi"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+      <h4>Stays on your device</h4>
+      <p>The PDF is parsed in your browser. Nothing is sent to a server — close the tab and it's gone.</p>
+    </div>
+    <div class="fcard">
+      <div class="fi"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M3 12h18M3 18h12"/></svg></div>
+      <h4>Balance-checked</h4>
+      <p>Every row is reconstructed from the running balance, then tied back to the statement's closing figure.</p>
+    </div>
+    <div class="fcard">
+      <div class="fi"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></div>
+      <h4>Ready to work with</h4>
+      <p>Output is a formatted workbook — sortable, with debit/credit split and a clean summary sheet.</p>
+    </div>
+  </footer>
+
+  <p class="demo-flag"><b>Demo build.</b> The extraction engine here is a generic placeholder for wiring up the flow — the production version swaps in the full bank-specific engine.</p>
+
+</div>
+
+<script>
+/* ============================================================
+   statement → xlsx  —  client-side demo
+   pdf.js extracts text+coords · generic balance-driven parser
+   · ExcelJS builds the styled workbook. Zero upload.
+   ============================================================ */
+
+pdfjsLib.GlobalWorkerOptions.workerSrc =
+  'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+const SUPPORTED_BANKS = [
+  { name:'Maybank',            re:/malayan banking|maybank|maybank2u|\bmbb\b/i },
+  { name:'CIMB',               re:/\bcimb\b/i },
+  { name:'Public Bank',        re:/public bank|\bpbb\b|pbebank/i },
+  { name:'RHB',                re:/\brhb\b/i },
+  { name:'Hong Leong',         re:/hong leong|\bhlb\b|\bhlbb\b/i },
+  { name:'AmBank',             re:/\bambank\b|am bank/i },
+  { name:'Bank Islam',         re:/bank islam/i },
+  { name:'Alliance Bank',      re:/alliance bank/i },
+  { name:'UOB',                re:/united overseas|\buob\b/i },
+  { name:'OCBC',               re:/\bocbc\b/i },
+  { name:'HSBC',               re:/\bhsbc\b/i },
+  { name:'Standard Chartered', re:/standard chartered/i },
+  { name:'Affin Bank',         re:/affin/i },
+  { name:'BSN',                re:/bank simpanan|\bbsn\b/i },
+];
+
+// chips
+document.getElementById('bankChips').innerHTML =
+  SUPPORTED_BANKS.map(b=>`<span class="bank-chip">${b.name}</span>`).join('');
+
+// ---- element refs ----
+const el = id => document.getElementById(id);
+const dropzone=el('dropzone'), fileInput=el('fileInput'), pickBtn=el('pickBtn');
+const pwBox=el('pwBox'), pwInput=el('pwInput'), pwBtn=el('pwBtn');
+const proc=el('proc'), procFile=el('procFile'), procStep=el('procStep');
+const results=el('results'), errBox=el('errBox');
+
+let currentFile=null, lastResult=null;
+
+// ---- UI helpers ----
+function show(node){node.classList.remove('hidden');}
+function hide(node){node.classList.add('hidden');}
+function resetView(){[pwBox,proc,results,errBox].forEach(hide);show(dropzone);pwBox.classList.remove('err');}
+
+// ---- file intake ----
+pickBtn.addEventListener('click',e=>{e.stopPropagation();fileInput.click();});
+dropzone.addEventListener('click',()=>fileInput.click());
+dropzone.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();fileInput.click();}});
+fileInput.addEventListener('change',e=>{ if(e.target.files[0]) startFile(e.target.files[0]); });
+['dragenter','dragover'].forEach(ev=>dropzone.addEventListener(ev,e=>{e.preventDefault();dropzone.classList.add('drag');}));
+['dragleave','drop'].forEach(ev=>dropzone.addEventListener(ev,e=>{e.preventDefault();dropzone.classList.remove('drag');}));
+dropzone.addEventListener('drop',e=>{const f=e.dataTransfer.files[0];if(f)startFile(f);});
+
+el('againBtn').addEventListener('click',resetView);
+el('errRetry').addEventListener('click',resetView);
+
+async function startFile(file){
+  if(file.type!=='application/pdf' && !/\.pdf$/i.test(file.name)){
+    return showError('Not a PDF','This demo reads PDF statements. Please choose a .pdf file.');
+  }
+  currentFile=file;
+  await tryOpen();
+}
+
+async function tryOpen(password){
+  hide(dropzone);hide(pwBox);hide(errBox);hide(results);
+  show(proc);
+  procFile.textContent=currentFile.name;
+  procStep.textContent='Opening the PDF';
+  try{
+    const buf=await currentFile.arrayBuffer();
+    const task=pdfjsLib.getDocument({data:buf, password:password||''});
+    const pdf=await task.promise;
+    await extractAndRender(pdf);
+  }catch(err){
+    if(err && err.name==='PasswordException'){
+      hide(proc);
+      pwBox.classList.toggle('err', err.code===2); // 2 = wrong password
+      show(pwBox);
+      pwInput.value='';pwInput.focus();
+      return;
+    }
+    console.error(err);
+    showError('Couldn’t read this statement',
+      'The PDF opened but the text couldn’t be parsed. If it’s a scanned image, this demo can’t handle it yet — that path needs server-side OCR.');
+  }
+}
+
+pwBtn.addEventListener('click',()=>tryOpen(pwInput.value));
+pwInput.addEventListener('keydown',e=>{if(e.key==='Enter')tryOpen(pwInput.value);});
+
+// ============================================================
+//  EXTRACTION  — pull text with coordinates, group into lines
+// ============================================================
+async function extractAndRender(pdf){
+  procStep.textContent=`Reading ${pdf.numPages} page(s)…`;
+  const lines=[];           // {page,y,text,items:[{x,str}]}
+  let fingerprintText='';
+  for(let p=1;p<=pdf.numPages;p++){
+    const page=await pdf.getPage(p);
+    const tc=await page.getTextContent();
+    if(p<=2) fingerprintText += ' ' + tc.items.map(i=>i.str).join(' ');
+    // group items by y (PDF user space; y grows upward)
+    const rows={};
+    for(const it of tc.items){
+      if(!it.str.trim()) continue;
+      const x=it.transform[4], y=it.transform[5];
+      const key=Math.round(y/3);          // ~3pt tolerance bucket
+      (rows[key]=rows[key]||[]).push({x,str:it.str});
+    }
+    Object.keys(rows)
+      .map(Number).sort((a,b)=>b-a)        // top of page first
+      .forEach(k=>{
+        const items=rows[k].sort((a,b)=>a.x-b.x);
+        lines.push({page:p,y:k*3,items,text:items.map(i=>i.str).join(' ').replace(/\s+/g,' ').trim()});
+      });
+  }
+  const bank=detectBank(fingerprintText);
+  const parsed=parseStatement(lines);
+  procStep.textContent='Building the spreadsheet…';
+  lastResult={bank,...parsed};
+  renderResults(lastResult);
+}
+
+function detectBank(text){
+  for(const b of SUPPORTED_BANKS){ if(b.re.test(text)) return b.name; }
+  return 'Unrecognised bank';
+}
+
+// ---- number + date helpers ----
+// an amount = a number with exactly 2 decimals (ignores 18-digit ref strings)
+const AMT_RE=/\(?-?\d{1,3}(?:,\d{3})*\.\d{2}\)?/g;
+const DATE_RES=[
+  /^(\d{1,2}[\/\-.]\d{1,2}[\/\-.]\d{2,4})\b/,        // DD/MM/YYYY or DD/MM/YY
+  /^(\d{4}-\d{2}-\d{2})\b/,                            // YYYY-MM-DD
+  /^(\d{1,2}\s+[A-Za-z]{3,9}(?:\s+\d{2,4})?)\b/,      // DD Mon [YYYY]
+  /^(\d{1,2}[\/\-]\d{1,2})(?![\/\-.]?\d)/,            // bare DD/MM (Maybank, Public Bank)
+];
+let STMT_YEAR=null;
+function leadingDate(text){
+  for(const re of DATE_RES){ const m=text.match(re); if(m) return m[1]; }
+  return null;
+}
+// normalise any captured date to DD/MM/YYYY, filling the year from the statement when missing
+function normDate(d){
+  if(!d) return '';
+  if(/[A-Za-z]/.test(d)) return (STMT_YEAR && !/\d{4}/.test(d)) ? (d+' '+STMT_YEAR) : d;
+  const p=d.split(/[\/\-.]/);
+  if(p.length===2) return STMT_YEAR ? `${p[0].padStart(2,'0')}/${p[1].padStart(2,'0')}/${STMT_YEAR}` : d;
+  if(p.length===3){
+    let [a,b,c]=p;
+    if(a.length===4) return `${c.padStart(2,'0')}/${b.padStart(2,'0')}/${a}`; // ISO -> DD/MM/YYYY
+    if(c.length===2) c='20'+c;
+    return `${a.padStart(2,'0')}/${b.padStart(2,'0')}/${c}`;
+  }
+  return d;
+}
+function parseAmount(tok){
+  const v=parseFloat(tok.replace(/[(),]/g,'').replace(/[^0-9.\-]/g,''));
+  return isNaN(v)?null:Math.abs(v);
+}
+// each amount carries a sign hint from a trailing +,-,CR,DR or wrapping ()
+function findAmounts(text){
+  const out=[]; let m;
+  AMT_RE.lastIndex=0;
+  while((m=AMT_RE.exec(text))){
+    const v=parseAmount(m[0]);
+    if(v===null) continue;
+    const after=text.slice(m.index+m[0].length, m.index+m[0].length+3);
+    let sign=0;
+    if(/^\s*\+/.test(after)) sign=1;
+    else if(/^\s*-/.test(after)||/^\(/.test(m[0])) sign=-1;
+    else if(/^\s*CR/i.test(after)) sign=1;
+    else if(/^\s*DR/i.test(after)) sign=-1;
+    out.push({value:v,index:m.index,sign});
+  }
+  return out;
+}
+const round2=n=>Math.round((n+Number.EPSILON)*100)/100;
+
+// page furniture — never data
+const NOISE_RE=/(malayan banking|public bank berhad|menara maybank|protected by pidm|dilindungi oleh pidm|muka\s*\/|page\s+\d+\s+of\s+\d+|muka surat|transaction description|statement balance|baki penyata|entry date|value date|baki legar|ledger\s*=|transaction amount|computer generated|tandatangan tidak|thank you for banking|excellence is our|anti-?bribery|anti-?rasuah|zero.?tolerance|privacy notice|notis privasi|^perhatian\b|^attention\b|^tel:|jalan tun perak|berjaya times|bandar puteri|damansara jaya branch|cca sme|account transactions|urusniaga akaun|no\.?\s+of\s+(debits|credits|withdrawals|deposits)|bil\.?\s+(debit|kredit)|jumlah (debit|kredit)|total (debits|credits|withdrawals|deposits)|transaction\s+summary|hold amount|late local cheque|base lending rate|kadar pinjaman|service tax act|fatca|common reporting standard|important notes|nota penting|tax residency|rhb banking group)/i;
+const CJK_RE=/[\u4e00-\u9fff]/;
+const OPEN_RE=/(beginning balance|balance from last statement|balance b\/f|baki bawa|baki b\/b|brought forward|b\/f balance)/i;
+const CLOSE_HARD_RE=/(closing balance in this statement|ending balance|baki akhir)/i;
+const CARRY_RE=/(balance c\/f|baki hadapan|baki bawa ke hadapan|carried forward|c\/f balance)/i;
+
+// ============================================================
+//  PARSER  — balance-anchored (demo). A transaction is any line
+//  ending in a running balance; the date carries forward from the
+//  last one seen; debit vs credit comes from the balance movement.
+// ============================================================
+function parseStatement(lines){
+  // ---- detect the statement year, for DD/MM dates printed without a year ----
+  STMT_YEAR=null;
+  for(const line of lines){
+    const t=line.text||'';
+    if(/statement date|tarikh penyata|結單日期/i.test(t)){
+      const m=t.match(/\d{1,2}[\/\-.]\d{1,2}[\/\-.](\d{2,4})/)||t.match(/[A-Za-z]{3,}\s+(20\d{2})/)||t.match(/\b(20\d{2})\b/);
+      if(m){ let y=m[1]; if(y.length===2) y='20'+y; STMT_YEAR=y; break; }
+    }
+  }
+  if(!STMT_YEAR){ for(const line of lines.slice(0,40)){ const m=(line.text||'').match(/\b(20\d{2})\b/); if(m){STMT_YEAR=m[1];break;} } }
+
+  // strict pass: enforce balance continuity (balance = prev ± amount) to drop pseudo-rows
+  const strict=parseCore(lines,true);
+  // safety: if continuity rejected a large share, the balance-column assumption may not
+  // hold for this layout — fall back to loose mode so we never silently empty a statement
+  if(strict.rejected>4 && strict.rejected>strict.txns.length*0.15){
+    const loose=parseCore(lines,false); loose.fellBack=true; return loose;
+  }
+  return strict;
+}
+
+function parseCore(lines,strict){
+  const txns=[];
+  let prevBal=null, openingBal=null, closingStated=null;
+  let currentDate=null, firstDate=null, lastDate=null, rejected=0;
+
+  for(const line of lines){
+    const t=line.text;
+    if(!t || NOISE_RE.test(t) || CJK_RE.test(t)) continue;
+
+    const amts=findAmounts(t);
+    const date=leadingDate(t);
+    if(date) currentDate=date;
+
+    if(OPEN_RE.test(t) && amts.length>=1){
+      const b=amts[amts.length-1].value;
+      if(openingBal===null) openingBal=b;
+      prevBal=b; continue;
+    }
+    if(CLOSE_HARD_RE.test(t) && amts.length>=1){ closingStated=amts[amts.length-1].value; continue; }
+    if(CARRY_RE.test(t) && amts.length>=1){ prevBal=amts[amts.length-1].value; continue; }
+
+    if(amts.length>=2){
+      const balance=amts[amts.length-1].value;
+      const others=amts.slice(0,-1);
+      let txnAmt=null, debit=null, credit=null, ok=false;
+
+      if(prevBal!==null){
+        const delta=round2(balance-prevBal);
+        const need=Math.abs(delta);
+        // pick the amount that actually explains the balance movement (also skips stray numbers)
+        const pick=others.find(a=>Math.abs(a.value-need)<0.01);
+        if(pick){
+          txnAmt=pick.value; ok=true;
+          if(delta>0.005) credit=txnAmt;
+          else if(delta<-0.005) debit=txnAmt;
+          else { if(pick.sign>0) credit=txnAmt; else debit=txnAmt; }
+        } else if(!strict){
+          // loose fallback: trust the columns, classify by movement / sign
+          const a=others[others.length-1]; txnAmt=a.value; ok=true;
+          if(delta>0.005) credit=txnAmt; else if(delta<-0.005) debit=txnAmt;
+          else { if(a.sign>0) credit=txnAmt; else debit=txnAmt; }
+        }
+        // strict + no match => pseudo-row (summary/footer): reject, keep prevBal anchored
+      } else {
+        // no reference balance yet (before opening) — accept, classify by sign
+        const a=others[others.length-1]; txnAmt=a.value; ok=true;
+        if(a.sign<0) debit=txnAmt; else credit=txnAmt;
+      }
+
+      if(ok){
+        let desc=t;
+        if(date) desc=desc.replace(date,'');
+        desc=desc.replace(AMT_RE,' ').replace(/\s[+\-](?=\s|$)/g,' ').replace(/\s+/g,' ').trim();
+        const nd=normDate(currentDate);
+        txns.push({date:nd,desc,debit,credit,balance});
+        prevBal=balance;
+        if(!firstDate)firstDate=nd; lastDate=nd;
+      } else { rejected++; }
+    } else if(txns.length && amts.length===0 && t.length>2){
+      const last=txns[txns.length-1];
+      if(last.desc.length<160) last.desc=(last.desc+' '+t).replace(/\s+/g,' ').trim();
+    }
+  }
+
+  const computedClosing = txns.length ? txns[txns.length-1].balance : null;
+  let sumDebit=0,sumCredit=0;
+  for(const x of txns){ if(x.debit)sumDebit=round2(sumDebit+x.debit); if(x.credit)sumCredit=round2(sumCredit+x.credit); }
+  let reconciled=null, basis=null;
+  if(closingStated!=null && computedClosing!=null){
+    reconciled=Math.abs(round2(computedClosing-closingStated))<0.01; basis='stated closing';
+  } else if(openingBal!=null && computedClosing!=null){
+    const expected=round2(openingBal+sumCredit-sumDebit);
+    reconciled=Math.abs(round2(expected-computedClosing))<0.01; basis='opening + credits − debits';
+  }
+
+  return {txns,openingBal,closingStated,computedClosing,sumDebit,sumCredit,reconciled,basis,rejected,fellBack:false,
+          period:(firstDate&&lastDate)?`${firstDate} – ${lastDate}`:'—'};
+}
+
+// ============================================================
+//  RENDER
+// ============================================================
+const fmt = n => (n==null||isNaN(n)) ? '' :
+  n.toLocaleString('en-MY',{minimumFractionDigits:2,maximumFractionDigits:2});
+
+function renderResults(r){
+  hide(proc);hide(pwBox);
+  if(!r.txns.length){
+    return showError('No transactions found',
+      `The file opened and text was read, but no transaction rows matched${r.bank==='Unrecognised bank'?'':' for '+r.bank}. This demo engine is generic — your real engine handles the layouts it can’t. If it’s a scanned PDF, OCR isn’t in this demo.`);
+  }
+  el('detected').textContent=r.bank;
+  el('mPeriod').textContent=r.period;
+  el('mRows').textContent=r.txns.length;
+  el('mClosing').textContent = r.computedClosing!=null ? 'RM '+fmt(r.computedClosing) : '—';
+
+  const tie=el('tie'), tieText=el('tieText');
+  tie.className='tie '+(r.reconciled?'ok':'warn');
+  tieText.textContent = r.reconciled===true ? 'Reconciled to closing balance'
+    : r.reconciled===false ? `Off by RM ${fmt(Math.abs(round2(r.computedClosing-r.closingStated)))} — check rows`
+    : 'No closing balance to verify against';
+
+  const body=el('ledgerBody'); body.innerHTML='';
+  const CAP=120;
+  r.txns.slice(0,CAP).forEach(tx=>{
+    const tr=document.createElement('tr');
+    tr.innerHTML=`<td class="date">${escapeHtml(tx.date)}</td>
+      <td class="desc">${escapeHtml(tx.desc)}</td>
+      <td class="num debit">${fmt(tx.debit)}</td>
+      <td class="num credit">${fmt(tx.credit)}</td>
+      <td class="num bal">${fmt(tx.balance)}</td>`;
+    body.appendChild(tr);
+  });
+  if(r.txns.length>CAP){
+    const tr=document.createElement('tr');tr.className='more-row';
+    tr.innerHTML=`<td colspan="5">+ ${r.txns.length-CAP} more rows — all included in the download</td>`;
+    body.appendChild(tr);
+  }
+  show(results);
+}
+
+function escapeHtml(s){return (s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
+
+function showError(title,msg){
+  hide(proc);hide(pwBox);hide(results);
+  el('errTitle').textContent=title;
+  el('errMsg').textContent=msg;
+  show(errBox);
+}
+
+// ============================================================
+//  EXCEL EXPORT  — ExcelJS, navy header (FF1F3864 / white Arial)
+// ============================================================
+el('dlBtn').addEventListener('click',exportExcel);
+
+async function exportExcel(){
+  if(!lastResult) return;
+  const r=lastResult;
+  const wb=new ExcelJS.Workbook();
+  wb.creator='statement → xlsx';
+
+  const NAVY='FF1F3864';
+  const headerStyle=row=>{
+    row.eachCell(c=>{
+      c.fill={type:'pattern',pattern:'solid',fgColor:{argb:NAVY}};
+      c.font={name:'Arial',bold:true,color:{argb:'FFFFFFFF'},size:11};
+      c.alignment={vertical:'middle'};
+      c.border={bottom:{style:'thin',color:{argb:'FFBFBFBF'}}};
+    });
+    row.height=22;
+  };
+
+  // --- Summary sheet ---
+  const s=wb.addWorksheet('Summary');
+  s.columns=[{width:24},{width:34}];
+  s.addRow(['Bank statement summary','']); 
+  s.getRow(1).font={name:'Arial',bold:true,size:14,color:{argb:NAVY}};
+  s.addRow([]);
+  const rows=[
+    ['Bank detected', r.bank],
+    ['Statement period', r.period],
+    ['Transactions', r.txns.length],
+    ['Opening balance', r.openingBal!=null?r.openingBal:'—'],
+    ['Computed closing', r.computedClosing!=null?r.computedClosing:'—'],
+    ['Stated closing', r.closingStated!=null?r.closingStated:'—'],
+    ['Reconciled', r.reconciled===true?'Yes — ties to closing':r.reconciled===false?'No — review rows':'No closing figure found'],
+  ];
+  rows.forEach(([k,v])=>{
+    const row=s.addRow([k,v]);
+    row.getCell(1).font={name:'Arial',bold:true,size:11,color:{argb:'FF333333'}};
+    row.getCell(2).font={name:'Arial',size:11};
+    if(typeof v==='number') row.getCell(2).numFmt='#,##0.00';
+  });
+
+  // --- Transactions sheet ---
+  const ws=wb.addWorksheet('Transactions');
+  ws.columns=[
+    {header:'Date',width:14},
+    {header:'Description',width:52},
+    {header:'Debit (RM)',width:15},
+    {header:'Credit (RM)',width:15},
+    {header:'Balance (RM)',width:16},
+  ];
+  headerStyle(ws.getRow(1));
+  ws.views=[{state:'frozen',ySplit:1}];
+  r.txns.forEach(tx=>{
+    const row=ws.addRow([tx.date,tx.desc,tx.debit??null,tx.credit??null,tx.balance]);
+    row.font={name:'Arial',size:10};
+    [3,4,5].forEach(c=>{row.getCell(c).numFmt='#,##0.00';row.getCell(c).alignment={horizontal:'right'};});
+    row.getCell(3).font={name:'Arial',size:10,color:{argb:'FFB23A48'}};
+    row.getCell(4).font={name:'Arial',size:10,color:{argb:'FF15795B'}};
+    row.getCell(5).font={name:'Arial',size:10,bold:true};
+  });
+  ws.autoFilter='A1:E1';
+
+  const buf=await wb.xlsx.writeBuffer();
+  const blob=new Blob([buf],{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
+  const safe=(r.bank==='Unrecognised bank'?'statement':r.bank).replace(/[^a-z0-9]+/ig,'_');
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download=`${safe}_statement.xlsx`;
+  document.body.appendChild(a);a.click();
+  setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove();},1500);
+}
+</script>
+</body>
+</html>

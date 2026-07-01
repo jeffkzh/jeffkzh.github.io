@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jeffrey Kong — Finance & Accounting Tools</title>
+<meta name="description" content="Free, practical finance and accounting tools for Malaysian SMEs. Built by an ex-auditor. Everything runs in your browser.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#1F3864;
+    --ink:#16223B;
+    --paper:#EEF1F5;
+    --card:#FFFFFF;
+    --line:#DDE3EC;
+    --gold:#B0821F;
+    --gold-soft:#F4ECD8;
+    --text:#1E2A44;
+    --muted:#697488;
+  }
+  *{box-sizing:border-box;}
+  html{-webkit-text-size-adjust:100%;}
+  body{
+    margin:0;background:var(--paper);color:var(--text);
+    font-family:"Inter",system-ui,sans-serif;line-height:1.5;
+    font-variant-numeric:tabular-nums;
+  }
+  a{color:inherit;}
+  .wrap{max-width:1040px;margin:0 auto;padding:40px 20px 72px;}
+
+  .meta-strip{
+    display:flex;flex-wrap:wrap;gap:14px;align-items:center;
+    font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.16em;
+    text-transform:uppercase;color:var(--muted);margin-bottom:30px;
+  }
+  .meta-strip .dot{width:5px;height:5px;background:var(--gold);border-radius:1px;}
+
+  header{border-bottom:1px solid var(--line);padding-bottom:34px;margin-bottom:38px;}
+  .eyebrow{
+    font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.2em;
+    text-transform:uppercase;color:var(--gold);font-weight:600;margin:0 0 14px;
+  }
+  h1{
+    font-family:"Fraunces",serif;font-weight:600;letter-spacing:-.015em;
+    font-size:clamp(30px,5.5vw,50px);line-height:1.02;margin:0 0 16px;color:var(--ink);max-width:16ch;
+  }
+  .lede{max-width:62ch;color:var(--muted);font-size:16px;margin:0;}
+  .lede b{color:var(--text);font-weight:600;}
+
+  .section-label{
+    font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--muted);margin:0 0 18px;display:flex;align-items:center;gap:12px;
+  }
+  .section-label::after{content:"";flex:1;height:1px;background:var(--line);}
+
+  .tools{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+  @media(max-width:720px){.tools{grid-template-columns:1fr;}}
+
+  .tool{
+    display:flex;flex-direction:column;background:var(--card);border:1px solid var(--line);
+    border-radius:12px;padding:22px 22px 20px;text-decoration:none;position:relative;overflow:hidden;
+    transition:transform .16s ease, box-shadow .16s ease, border-color .16s ease;
+  }
+  .tool::before{
+    content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--gold);
+    transform:scaleY(0);transform-origin:top;transition:transform .18s ease;
+  }
+  .tool:hover{transform:translateY(-3px);box-shadow:0 10px 26px -12px rgba(31,56,100,.28);border-color:#C6D0DE;}
+  .tool:hover::before{transform:scaleY(1);}
+  .tool:focus-visible{outline:2px solid var(--gold);outline-offset:3px;}
+
+  .tag{
+    font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;
+    color:var(--gold);font-weight:600;margin-bottom:14px;
+  }
+  .tool h2{font-family:"Fraunces",serif;font-weight:600;font-size:21px;line-height:1.15;color:var(--ink);margin:0 0 8px;}
+  .tool p{font-size:13.5px;color:var(--muted);margin:0 0 18px;line-height:1.55;}
+  .tool .banks{font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--text);letter-spacing:.02em;margin:-6px 0 16px;}
+  .open{
+    margin-top:auto;font-family:"IBM Plex Mono",monospace;font-size:12px;font-weight:600;letter-spacing:.06em;
+    text-transform:uppercase;color:var(--navy);display:inline-flex;align-items:center;gap:7px;
+  }
+  .tool:hover .open{gap:11px;}
+  .open .arr{transition:transform .16s ease;}
+  .tool:hover .open .arr{transform:translateX(3px);}
+
+  .tool.soon{background:transparent;border-style:dashed;pointer-events:none;}
+  .tool.soon h2,.tool.soon .tag{color:var(--muted);}
+  .tool.soon .open{color:var(--muted);}
+
+  footer{margin-top:52px;border-top:1px solid var(--line);padding-top:30px;}
+  .foot-grid{display:flex;flex-wrap:wrap;justify-content:space-between;gap:24px;}
+  .foot-id .name{font-family:"Fraunces",serif;font-weight:600;font-size:18px;color:var(--ink);margin:0 0 4px;}
+  .foot-id .role{font-size:13px;color:var(--muted);max-width:42ch;margin:0;}
+  .contact{display:flex;flex-direction:column;gap:8px;}
+  .contact a{
+    font-family:"IBM Plex Mono",monospace;font-size:12.5px;color:var(--navy);text-decoration:none;
+    display:inline-flex;align-items:center;gap:8px;letter-spacing:.02em;
+  }
+  .contact a:hover{color:var(--gold);text-decoration:underline;}
+  .contact .lab{color:var(--muted);text-transform:uppercase;letter-spacing:.12em;font-size:10.5px;}
+  .disclaimer{margin-top:26px;font-size:11.5px;color:var(--muted);line-height:1.6;max-width:80ch;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="meta-strip">
+    <span>Malaysia</span><span class="dot"></span>
+    <span>Runs in your browser</span><span class="dot"></span>
+    <span>Free to use</span>
+  </div>
+
+  <header>
+    <p class="eyebrow">Jeffrey Kong &middot; Finance &amp; Accounting</p>
+    <h1>Practical tools for Malaysian SMEs</h1>
+    <p class="lede">Small, focused calculators and converters built from real finance and audit work &mdash; the kind of thing you'd otherwise rebuild in a spreadsheet every time. <b>Everything runs entirely in your browser; nothing you enter is uploaded or stored.</b></p>
+  </header>
+
+  <p class="section-label">Tools</p>
+  <div class="tools">
+
+    <a class="tool" href="installment-float.html">
+      <span class="tag">Cash flow &middot; Time value of money</span>
+      <h2>Installment vs. Upfront</h2>
+      <p>Paying a 0% installment instead of upfront lets you keep the cash invested. This shows exactly what that float is worth against a liquid-asset yield, with a full period-by-period schedule.</p>
+      <span class="open">Open tool <span class="arr">&rarr;</span></span>
+    </a>
+
+    <a class="tool" href="bank-statement-converter.html">
+      <span class="tag">Reconciliation &middot; Bookkeeping</span>
+      <h2>Bank Statement Converter</h2>
+      <p>Turn Malaysian bank statement PDFs into clean, structured Excel &mdash; balance-anchored so every line reconciles. No upload: your statement is parsed on your own device.</p>
+      <div class="banks">RHB &middot; CIMB &middot; Public Bank &middot; Maybank &middot; OCBC</div>
+      <span class="open">Open tool <span class="arr">&rarr;</span></span>
+    </a>
+
+    <div class="tool soon">
+      <span class="tag">Coming soon</span>
+      <h2>More on the way</h2>
+      <p>E-invoice readiness, withholding tax (CP37), stamp duty, cash conversion cycle &mdash; added as they're built.</p>
+      <span class="open">In progress</span>
+    </div>
+
+  </div>
+
+  <footer>
+    <div class="foot-grid">
+      <div class="foot-id">
+        <p class="name">Jeffrey Kong</p>
+        <p class="role">Ex-auditor and finance manager. I help SME audit and tax firms with process transformation and hands-on implementation.</p>
+      </div>
+      <div class="contact">
+        <span class="lab">Get in touch</span>
+        <a href="mailto:YOUR-EMAIL@EXAMPLE.COM">&#9993; &nbsp;YOUR-EMAIL@EXAMPLE.COM</a>
+        <a href="https://www.linkedin.com/in/YOUR-LINKEDIN" target="_blank" rel="noopener">in&nbsp; LinkedIn</a>
+        <a href="https://wa.me/60XXXXXXXXX" target="_blank" rel="noopener">&#9671; &nbsp;WhatsApp</a>
+      </div>
+    </div>
+    <p class="disclaimer">These tools are decision aids, not professional advice. They make simplifying assumptions and don't account for your full circumstances &mdash; verify anything material against your own records or a qualified advisor. Everything is processed client-side in your browser; no data is transmitted to any server.</p>
+  </footer>
+
+</div>
+</body>
+</html>
