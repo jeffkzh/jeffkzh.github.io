@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Moomoo Malaysia New-User Reward — The Honest Breakdown</title>
+<meta name="description" content="A plain-numbers look at Moomoo Malaysia's new-user welcome pack: the real 60-day return by deposit tier, how to collect it with minimal market risk, and the actual risks.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#1F3864;--ink:#16223B;--paper:#EEF1F5;--card:#FFFFFF;--line:#DDE3EC;
+    --gold:#B0821F;--gold-soft:#F4ECD8;--text:#1E2A44;--muted:#697488;
+    --pos:#1F6F4B;--pos-soft:#E4F0EA;--warn:#A8341F;
+  }
+  *{box-sizing:border-box;}
+  html{-webkit-text-size-adjust:100%;}
+  body{margin:0;background:var(--paper);color:var(--text);font-family:"Inter",system-ui,sans-serif;line-height:1.55;font-variant-numeric:tabular-nums;}
+  a{color:inherit;}
+  .wrap{max-width:820px;margin:0 auto;padding:32px 20px 72px;}
+
+  .backlink{display:inline-flex;align-items:center;gap:6px;font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);text-decoration:none;margin-bottom:22px;}
+  .backlink:hover{color:var(--navy);}
+
+  .eyebrow{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);font-weight:600;margin:0 0 12px;}
+  h1{font-family:"Fraunces",serif;font-weight:600;letter-spacing:-.015em;font-size:clamp(28px,5vw,42px);line-height:1.06;margin:0 0 14px;color:var(--ink);}
+  .lede{color:var(--muted);font-size:16px;margin:0 0 8px;max-width:60ch;}
+  .stamp{font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--muted);margin-top:14px;}
+  .stamp a{color:var(--navy);}
+
+  h2{font-family:"Fraunces",serif;font-weight:600;font-size:23px;color:var(--ink);margin:44px 0 14px;}
+  p{margin:0 0 14px;}
+
+  .offer{background:var(--navy);color:#fff;border-radius:14px;padding:26px 24px;margin-top:26px;}
+  .offer .row{display:flex;flex-wrap:wrap;gap:22px;}
+  .offer .item{flex:1;min-width:130px;}
+  .offer .k{font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:#A9B7CE;margin-bottom:6px;}
+  .offer .v{font-family:"Fraunces",serif;font-size:26px;font-weight:600;line-height:1;}
+  .offer .v small{font-size:13px;font-family:"Inter";color:#C6D0DE;font-weight:400;}
+  .offer .fine{font-family:"IBM Plex Mono",monospace;font-size:10.5px;color:#8FA0BC;margin-top:18px;line-height:1.6;}
+
+  .tiers{border:1px solid var(--line);border-radius:12px;overflow:hidden;margin:8px 0 14px;}
+  table{border-collapse:collapse;width:100%;font-family:"IBM Plex Mono",monospace;font-size:12.5px;}
+  thead th{background:var(--navy);color:#fff;font-weight:500;text-align:right;padding:11px 14px;font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;}
+  thead th:first-child{text-align:left;}
+  tbody td{padding:10px 14px;text-align:right;border-top:1px solid var(--line);color:var(--text);}
+  tbody td:first-child{text-align:left;}
+  tbody tr:nth-child(even) td{background:#FAFBFD;}
+
+  .calc{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:24px;margin-top:8px;}
+  .calc .fields{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+  @media(max-width:560px){.calc .fields{grid-template-columns:1fr;}}
+  .field label{display:block;font-size:12.5px;font-weight:600;color:var(--ink);margin-bottom:6px;}
+  .field label .hint{display:block;font-weight:400;color:var(--muted);font-size:11px;margin-top:2px;}
+  .input-line{position:relative;display:flex;align-items:center;}
+  .prefix{position:absolute;left:12px;font-family:"IBM Plex Mono",monospace;font-size:13px;color:var(--muted);}
+  .field input{width:100%;padding:11px 12px 11px 40px;font-family:"IBM Plex Mono",monospace;font-size:15px;border:1px solid var(--line);border-radius:8px;background:#FBFCFE;color:var(--ink);-moz-appearance:textfield;}
+  .field input.nopre{padding-left:12px;}
+  .field input:focus{outline:none;border-color:var(--navy);box-shadow:0 0 0 3px rgba(31,56,100,.14);}
+  .field input::-webkit-outer-spin-button,.field input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0;}
+
+  .result{margin-top:22px;border-top:1px solid var(--line);padding-top:20px;}
+  .headline-num{display:flex;align-items:baseline;justify-content:space-between;flex-wrap:wrap;gap:12px;background:var(--pos-soft);border:1px solid #C6E2D3;border-radius:10px;padding:18px 20px;}
+  .headline-num .lab{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--pos);font-weight:600;}
+  .headline-num .big{font-family:"Fraunces",serif;font-weight:700;font-size:clamp(30px,6vw,44px);line-height:1;color:var(--ink);}
+  .headline-num.dq{background:#F7E9E5;border-color:#E4C4BC;}
+  .headline-num.dq .lab{color:var(--warn);}
+  .stat-row{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:8px;overflow:hidden;margin-top:14px;}
+  @media(max-width:560px){.stat-row{grid-template-columns:1fr;}}
+  .stat{background:#fff;padding:13px 14px;}
+  .stat .k{font-size:10px;font-family:"IBM Plex Mono",monospace;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);margin-bottom:5px;}
+  .stat .v{font-family:"IBM Plex Mono",monospace;font-size:15px;font-weight:600;color:var(--ink);}
+  .calc-note{font-size:12px;color:var(--muted);margin-top:14px;line-height:1.6;}
+  .calc-note.flag{color:var(--warn);font-weight:500;}
+
+  ul{margin:0 0 14px;padding-left:0;list-style:none;}
+  ul li{position:relative;padding-left:22px;margin-bottom:11px;}
+  ul li::before{content:"";position:absolute;left:2px;top:9px;width:6px;height:6px;background:var(--gold);border-radius:1px;}
+  ul.risk li::before{background:var(--warn);}
+  b{color:var(--ink);}
+
+  .cta{background:var(--gold-soft);border:1px solid #E7D6A8;border-radius:14px;padding:26px 24px;margin-top:34px;text-align:center;}
+  .cta h2{margin:0 0 8px;}
+  .cta p{color:var(--muted);font-size:14px;max-width:48ch;margin:0 auto 18px;}
+  .btn{display:inline-block;background:var(--navy);color:#fff;text-decoration:none;font-family:"IBM Plex Mono",monospace;font-size:13px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;padding:14px 28px;border-radius:9px;}
+  .btn:hover{background:#16223B;}
+
+  .disclaimer{margin-top:38px;border-top:1px solid var(--line);padding-top:22px;font-size:11.5px;color:var(--muted);line-height:1.65;}
+  .disclaimer b{color:var(--text);}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="backlink" href="./">← All tools</a>
+
+  <p class="eyebrow">Offer breakdown · Not financial advice</p>
+  <h1>The Moomoo Malaysia new-user reward, honestly</h1>
+  <p class="lede">A plain-numbers look at Moomoo's welcome pack — what each deposit tier is actually worth over the 60-day lock, how to keep market risk to a minimum, and the fine print that matters.</p>
+  <p class="stamp">Terms verified 4 July 2026 for the 30 Jun – 23 Sep 2026 campaign. Promotions change often — always confirm the live offer and exact tier thresholds on <a href="https://www.moomoo.com/my/promotion/welcome" target="_blank" rel="noopener">Moomoo's official page</a> before acting.</p>
+
+  <div class="offer">
+    <div class="row">
+      <div class="item"><div class="k">Welcome pack</div><div class="v">Up to RM1,500 <small>in rewards*</small></div></div>
+      <div class="item"><div class="k">Reward form</div><div class="v">Apple <small>fractional shares + coupons</small></div></div>
+      <div class="item"><div class="k">Hold for</div><div class="v">60 <small>days (fund lock)</small></div></div>
+    </div>
+    <p class="fine">*Pack comprises RM100 in coupons (1× RM50 cash coupon + 2× RM25 stock cash coupons) plus free Apple fractional shares at fixed values of RM100 / RM300 / RM1,000 by deposit tier (cumulative). Also included: a 180-day commission-free card and a 6% p.a. Cash Plus booster for 30 days (first subscription, up to RM30,000). Only cash deposits from a bank count — securities transfer-ins do NOT qualify. Deposits count within 30 days of your first deposit; shares convert at a fixed USD:MYR = 3.97 and are limited to 10,000 units campaign-wide, while stocks last. New users only, 18+. These terms have not been reviewed by the Securities Commission Malaysia.</p>
+  </div>
+
+  <h2>The tiers, and what they're worth</h2>
+  <p>Unlike a flat reward, Moomoo's pack scales with your <b>cumulative net cash deposit</b> (bank deposits minus withdrawals — transfer-ins don't count). Verified from the official T&amp;C for the current campaign:</p>
+  <div class="tiers">
+    <table>
+      <thead><tr><th>Net deposit (approx.)</th><th>Reward unlocked</th><th>Cumulative value</th><th>60-day return</th></tr></thead>
+      <tbody id="tierBody"></tbody>
+    </table>
+  </div>
+  <p class="calc-note">Return = cumulative reward ÷ deposit, over the 60-day lock. Notice the pattern: <b>the lowest tier gives the highest percentage return.</b> Bigger tiers give more ringgit but tie up disproportionately more capital.</p>
+
+  <h2>Run your own numbers</h2>
+  <div class="calc">
+    <div class="fields">
+      <div class="field">
+        <label>Amount you deposit<span class="hint">Within 30 days of your first deposit</span></label>
+        <div class="input-line"><span class="prefix">RM</span><input type="number" id="dep" value="1000" min="0" step="500" inputmode="decimal"></div>
+      </div>
+      <div class="field">
+        <label>Idle-cash yield while you wait<span class="hint">New users get 6% p.a. on Cash Plus for the first 30 days (up to RM30k); base ≈ 3.5% after. Blended over the 60-day lock ≈ 4.75%.</span></label>
+        <div class="input-line"><input class="nopre" type="number" id="ypa" value="4.75" min="0" step="0.1" inputmode="decimal"></div>
+      </div>
+    </div>
+    <div class="result" id="result"></div>
+    <p class="calc-note">One-time new-user rewards. The annualised figure is only for comparing against FDs or money-market yields — you can't repeat this every 60 days.</p>
+  </div>
+
+  <h2>How to maximise it</h2>
+  <ul>
+    <li><b>Deposit exactly to your chosen tier's threshold, not beyond.</b> Rewards are fixed per tier, so excess capital only dilutes your return. For most people the lowest tier is the best percentage play; step up a tier only if you'd genuinely invest that capital anyway.</li>
+    <li><b>Complete all deposits within 30 days of your first deposit.</b> Later top-ups don't count toward higher tiers — that's a hard rule in the T&amp;C. And it must be <b>cash from a bank</b>; transferring shares in from another broker doesn't count toward any tier.</li>
+    <li><b>Activate the 6% p.a. Cash Plus booster.</b> Confirmed in this campaign's pack: your first Cash Plus subscription (single subscription of RM500+) earns a subsidised 6% p.a. for 30 days, on up to RM30,000. Park the deposit there from day one; after the 30 days it reverts to the fund's base yield (~3.5% p.a.).</li>
+    <li><b>Don't let net deposit fall below your tier.</b> Withdrawals subtract from your cumulative net deposit; dropping below the threshold before the lock completes forfeits the reward.</li>
+    <li><b>Claim, don't just deposit.</b> Moomoo requires you to click "Claim" on the campaign page after hitting the threshold — the 60-day lock and reward issuance flow from there.</li>
+    <li><b>Sell the Apple shares promptly if you don't want US exposure.</b> The shares are granted at a fixed RM value, but from crediting onward they move with Apple's price and USD/MYR. Selling soon after crediting locks in the value, minus a small FX/spread cost.</li>
+  </ul>
+
+  <h2>The zero-market-risk route (almost)</h2>
+  <p>You can qualify without buying a single stock: deposit to your tier, leave the cash in Cash Plus for the 60 days, claim, receive the shares, and sell them once credited. Two honest caveats make this "low risk," not "no risk":</p>
+  <ul>
+    <li><b>The reward itself is stock, not cash.</b> Between crediting and your sale, the value rides Apple's share price and the USD/MYR rate. It's usually days, but it's real exposure — unlike a cash reward.</li>
+    <li><b>The 20% rule.</b> If you do invest the deposit and your holdings fall more than 20%, the fund-locking task can fail (Moomoo says to contact support for reissuance). Keeping the deposit in Cash Plus avoids ever tripping this.</li>
+    <li><b>Cash Plus is a money-market fund</b> — low risk, but not a bank deposit, not PIDM-insured, and the yield floats.</li>
+  </ul>
+
+  <h2>Using the coupons</h2>
+  <ul>
+    <li><b>The 2× RM25 stock cash coupons</b> activate immediately when you claim them and are valid for 90 days. Execute one eligible trade per coupon within that window and the coupon value is rebated <i>in cash</i> within 10 trading days (it doesn't offset the order amount). Use a liquid, low-cost trade to trigger them.</li>
+    <li><b>The RM50 cash coupon</b> needs no trade, but it unlocks only after you've maintained the RM1,000+ net deposit for the full 60 days — then credits within 10 trading days.</li>
+  </ul>
+
+  <h2>The risks and fine print</h2>
+  <ul class="risk">
+    <li><b>Capital is committed for 60 days</b> — plus the 30-day deposit window means the full cycle can run ~3 months. That's liquidity and opportunity cost.</li>
+    <li><b>Reward value isn't guaranteed in ringgit terms</b> once shares are credited — Apple's price and FX move it until you sell. Moomoo explicitly takes no responsibility for fluctuations between purchase and crediting.</li>
+    <li><b>Apple share rewards are capped at 10,000 units campaign-wide</b>, first come first served — if they run out before you complete the task, you don't get them.</li>
+    <li><b>Rewards aren't instant:</b> after the 60-day lock completes, issuance takes up to 10 trading days, and you must have clicked "Claim" on the campaign page first.</li>
+    <li><b>Strict single-account rules.</b> One account per person and per device; anything that looks like multi-accounting can void rewards entirely.</li>
+    <li><b>Thresholds and terms shift between campaign seasons</b> — Moomoo runs overlapping promos (store events, Cash Plus boosters, carnival draws) with different eligibility cut-off dates. Read the specific campaign you're registered under.</li>
+    <li><b>The reassuring part:</b> Moomoo Securities Malaysia is licensed by the Securities Commission Malaysia (eCMSL/A0397/2024), and the deposit itself stays your money throughout — only the reward is conditional.</li>
+  </ul>
+
+  <div class="cta">
+    <h2>Want to try it?</h2>
+    <p>If you decide it's worth it, signing up through my link supports these free tools. No pressure — the breakdown above is the same either way.</p>
+    <a class="btn" href="https://www.moomoo.com/my/promotion/2511-referree?global_content=%7B%22promote_content%22%3A%22250%22%2C%22promote_id%22%3A15066%2C%22promote_type%22%3A1%2C%22sub_promote_id%22%3A59%2C%22invite%22%3A106433291%7D" target="_blank" rel="noopener">Open a Moomoo account →</a>
+  </div>
+
+  <p class="disclaimer"><b>Disclosure:</b> this page contains a referral link — I may receive a reward if you sign up and qualify, at no cost to you. <b>Not financial advice.</b> I'm not a licensed financial adviser, and this is general information, not a recommendation tailored to your circumstances. All investing carries risk, including loss of capital; reward shares fluctuate in value; money-market funds are not capital-guaranteed; and promotional terms, tiers, and dates change frequently — verify everything against Moomoo's official terms before acting. This page has not been reviewed by the Securities Commission Malaysia.</p>
+
+</div>
+
+<script>
+(function(){
+  const fmt=new Intl.NumberFormat('en-MY',{minimumFractionDigits:2,maximumFractionDigits:2});
+  const fmt0=new Intl.NumberFormat('en-MY',{maximumFractionDigits:0});
+  const RM=n=>'RM '+fmt.format(n);
+  const pct=n=>fmt.format(n)+'%';
+  const DAYS=60;
+
+  // ---- TIER CONFIG: verified against Moomoo MY official T&C (campaign 30 Jun – 23 Sep 2026) ----
+  // reward = cumulative value unlocked at that net-deposit level (coupons + Apple shares)
+  const TIERS=[
+    {min:1000,  reward:100,  desc:'RM100 in coupons'},
+    {min:3000,  reward:200,  desc:'+ RM100 Apple share'},
+    {min:10000, reward:500,  desc:'+ RM300 Apple share'},
+    {min:30000, reward:1500, desc:'+ RM1,000 Apple share'}
+  ];
+
+  // Render tier table
+  const tb=document.getElementById('tierBody');
+  tb.innerHTML=TIERS.map(t=>{
+    const r=t.reward/t.min*100;
+    return `<tr><td>RM ${fmt0.format(t.min)}+</td><td>${t.desc}</td><td>${RM(t.reward)}</td><td>${pct(r)}</td></tr>`;
+  }).join('');
+
+  const $=id=>document.getElementById(id);
+  function tierFor(dep){let cur=null;for(const t of TIERS){if(dep>=t.min)cur=t;}return cur;}
+
+  function calc(){
+    const dep=Math.max(0,+$('dep').value||0);
+    const ypa=Math.max(0,+$('ypa').value||0)/100;
+    const t=tierFor(dep);
+    const r=$('result');
+    if(!t){
+      r.innerHTML=`
+        <div class="headline-num dq">
+          <span class="lab">Below the first tier</span>
+          <span class="big">RM 0</span>
+        </div>
+        <p class="calc-note flag">The first reward tier starts at RM ${fmt0.format(TIERS[0].min)} net deposit.</p>`;
+      return;
+    }
+    const reward=t.reward;
+    const idle=dep*ypa*DAYS/365;
+    const total=reward+idle;
+    const yield60=reward/dep*100;
+    const annualised=yield60*365/DAYS;
+    const next=TIERS[TIERS.indexOf(t)+1];
+    const overshoot = !next && dep>t.min || next && dep>t.min && dep<next.min;
+    r.innerHTML=`
+      <div class="headline-num">
+        <span class="lab">Reward return over 60 days</span>
+        <span class="big">${pct(yield60)}</span>
+      </div>
+      <div class="stat-row">
+        <div class="stat"><div class="k">Reward value (tier)</div><div class="v">${RM(reward)}</div></div>
+        <div class="stat"><div class="k">Idle-cash yield (60d)</div><div class="v">${RM(idle)}</div></div>
+        <div class="stat"><div class="k">Total benefit</div><div class="v">${RM(total)}</div></div>
+      </div>
+      <div class="stat-row">
+        <div class="stat"><div class="k">Total return (60d)</div><div class="v">${pct(total/dep*100)}</div></div>
+        <div class="stat"><div class="k">Annualised equiv.*</div><div class="v">${pct(annualised)}</div></div>
+        <div class="stat"><div class="k">On capital of</div><div class="v">${RM(dep)}</div></div>
+      </div>
+      ${overshoot?`<p class="calc-note flag">You're above the RM ${fmt0.format(t.min)} tier but ${next?`below the next tier at RM ${fmt0.format(next.min)}`:`at the top tier`} — the extra capital earns no additional reward, so your effective return drops. Deposit exactly at a threshold for the best return.</p>`:``}`;
+  }
+  ['dep','ypa'].forEach(id=>$(id).addEventListener('input',calc));
+  calc();
+})();
+</script>
+</body>
+</html>
