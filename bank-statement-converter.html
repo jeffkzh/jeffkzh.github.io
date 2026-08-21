@@ -408,8 +408,9 @@ function detectBank(text){
 }
 
 // ---- number + date helpers ----
-// an amount = a number with exactly 2 decimals (ignores 18-digit ref strings)
-const AMT_RE=/\(?-?\d{1,3}(?:,\d{3})*\.\d{2}\)?/g;
+// an amount = a number with exactly 2 decimals (ignores 18-digit ref strings);
+// integer part optional — Maybank prints sub-RM1 amounts as ".10" with no leading zero
+const AMT_RE=/\(?-?(?:\d{1,3}(?:,\d{3})*)?\.\d{2}\)?/g;
 const DATE_RES=[
   /^(\d{1,2}[\/\-.]\d{1,2}[\/\-.]\d{2,4})\b/,        // DD/MM/YYYY or DD/MM/YY
   /^(\d{4}-\d{2}-\d{2})\b/,                            // YYYY-MM-DD
@@ -459,7 +460,7 @@ function findAmounts(text){
 const round2=n=>Math.round((n+Number.EPSILON)*100)/100;
 
 // page furniture — never data
-const NOISE_RE=/(malayan banking|public bank berhad|menara maybank|protected by pidm|dilindungi oleh pidm|muka\s*\/|page\s+\d+\s+of\s+\d+|muka surat|transaction description|statement balance|baki penyata|entry date|value date|baki legar|ledger\s*=|transaction amount|computer generated|tandatangan tidak|thank you for banking|excellence is our|anti-?bribery|anti-?rasuah|zero.?tolerance|privacy notice|notis privasi|^perhatian\b|^attention\b|^tel:|jalan tun perak|berjaya times|bandar puteri|damansara jaya branch|cca sme|account transactions|urusniaga akaun|no\.?\s+of\s+(debits|credits|withdrawals|deposits)|bil\.?\s+(debit|kredit)|jumlah (debit|kredit)|total (debits|credits|withdrawals|deposits)|transaction\s+summary|hold amount|late local cheque|base lending rate|kadar pinjaman|service tax act|fatca|common reporting standard|important notes|nota penting|tax residency|rhb banking group)/i;
+const NOISE_RE=/(malayan banking|public bank berhad|menara maybank|protected by pidm|dilindungi oleh pidm|muka\s*\/|page\s+\d+\s+of\s+\d+|muka surat|transaction description|statement balance|baki penyata|entry date|value date|baki legar|ledger\s*=|transaction amount|computer generated|tandatangan tidak|thank you for banking|excellence is our|anti-?bribery|anti-?rasuah|zero.?tolerance|privacy notice|notis privasi|^perhatian\b|^attention\b|^tel:|jalan tun perak|berjaya times|bandar puteri|damansara jaya branch|cca sme|account transactions|urusniaga akaun|no\.?\s+of\s+(debits|credits|withdrawals|deposits)|bil\.?\s+(debit|kredit)|jumlah (debit|kredit)|total (debits?|credits?|withdrawals|deposits)|profit outstanding|transaction\s+summary|hold amount|late local cheque|base lending rate|kadar pinjaman|service tax act|fatca|common reporting standard|important notes|nota penting|tax residency|rhb banking group)/i;
 const CJK_RE=/[\u4e00-\u9fff]/;
 const OPEN_RE=/(beginning balance|balance from last statement|balance b\/f|baki bawa|baki b\/b|brought forward|b\/f balance)/i;
 const CLOSE_HARD_RE=/(closing balance in this statement|ending balance|baki akhir)/i;
